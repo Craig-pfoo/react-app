@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "bootstrap/dist/css/bootstrap.css";
+import Task from "./components/taskComponents";
+import Apps from "./components/App";
 
-const taskApp = <h1>Task Manager</h1>;
-ReactDOM.render(taskApp, document.getElementById('root'));
+ReactDOM.render(<Apps />, document.getElementById("root"));
