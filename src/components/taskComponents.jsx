@@ -40,7 +40,6 @@ class Task extends Component {
             ))}
           </tbody>
         </table>
-        <button className="btn btn-success btn-sm">Add Task</button>
       </React.Fragment>
     );
   }
