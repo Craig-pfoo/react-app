@@ -1,16 +1,26 @@
 import React, { Component } from "react";
 import { getTasks } from "../fakeTasks/fakeTaskService-1";
 import Pagination from "./common/pagination";
+import TaskGroup from "./common/taskGroup";
+import { getGenres } from "../fakeTasks/fakeGenreService";
 import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
 import Task from "./taskComponents";
+import { filter } from "lodash";
 
 class Apps extends Component {
   state = {
-    tasks: getTasks(),
+    tasks: [],
+    genres: [],
     currentPage: 1,
-    pageSize: 2,
+    pageSize: 3,
   };
+
+  componentDidMount() {
+    const genres = [{ name: "All Severities" }, ...getGenres()];
+
+    this.setState({ tasks: getTasks(), genres });
+  }
 
   handleCompleted = (task) => {
     const tasks = [...this.state.tasks];
@@ -24,22 +34,45 @@ class Apps extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleGenreSelect = (genre) => {
+    this.setState({ selectedGenre: genre, currentPage: 1 });
+  };
+
   render() {
-    const tasks = paginate(
-      this.state.tasks,
-      this.state.currentPage,
-      this.state.pageSize
-    );
+    const { selectedGenre, tasks, currentPage, pageSize } = this.state;
+
+    const filtered =
+      selectedGenre && selectedGenre._id
+        ? getTasks().filter((t) => t.severity._id === selectedGenre._id)
+        : getTasks();
+
+    const tasksPaginated = paginate(filtered, currentPage, pageSize);
 
     return (
-      <div className="container">
-        <Task tasks={tasks} onClick={this.handleCompleted} />
-        <Pagination
-          itemCount={this.state.tasks.length}
-          pageSize={this.state.pageSize}
-          currentPage={this.state.currentPage}
-          onPageChange={this.handlePageChange}
-        />
+      <div className="row">
+        <h1
+          style={{ fontSize: 50, fontWeight: "bold" }}
+          className="text-success-emphasis"
+        >
+          Task Manager
+        </h1>
+        <div className="col-3 mt-1">
+          <TaskGroup
+            tasks={this.state.genres}
+            selectedItem={this.state.selectedGenre}
+            onItemSelect={this.handleGenreSelect}
+          />
+        </div>
+        <div className="col">
+          <p>Showing {filtered.length} Tasks in the database.</p>
+          <Task tasks={tasksPaginated} onClick={this.handleCompleted} />
+          <Pagination
+            itemCount={filtered.length}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChange={this.handlePageChange}
+          />
+        </div>
       </div>
     );
   }

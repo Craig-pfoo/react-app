@@ -5,12 +5,6 @@ class Task extends Component {
   render() {
     return (
       <React.Fragment>
-        <h1
-          style={{ fontSize: 50, fontWeight: "bold" }}
-          className="text-success-emphasis"
-        >
-          Task Manager
-        </h1>
         <table className="table table-secondary table-striped">
           <thead>
             <tr>
