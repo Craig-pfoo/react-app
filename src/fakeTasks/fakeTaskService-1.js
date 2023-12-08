@@ -13,7 +13,7 @@ const tasks = [
     task: "Do the dishes",
     category: "Home",
     severity: { _id: "61b017a20cce782d386e736f", name: "Normal" },
-    completed: false,
+    completed: true,
   },
   {
     _id: "618c345feddf61c49609657c",

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { getTasks } from "../fakeTasks/fakeTaskService-1";
+import TaskTable from "./tasksTable";
 import Pagination from "./common/pagination";
 import TaskGroup from "./common/taskGroup";
+import PropTypes from "prop-types";
 import { getGenres } from "../fakeTasks/fakeGenreService";
 import { paginate } from "../utils/paginate";
-import PropTypes from "prop-types";
-import Task from "./taskComponents";
-import { filter } from "lodash";
+import { getTasks } from "../fakeTasks/fakeTaskService-1";
+import _ from "lodash";
 
 class Apps extends Component {
   state = {
@@ -14,10 +14,11 @@ class Apps extends Component {
     genres: [],
     currentPage: 1,
     pageSize: 3,
+    sortColumn: { path: "title", order: "asc" },
   };
 
   componentDidMount() {
-    const genres = [{ name: "All Severities" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All Severities" }, ...getGenres()];
 
     this.setState({ tasks: getTasks(), genres });
   }
@@ -38,21 +39,28 @@ class Apps extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
+  handleSort = (sortColumn) => {
+    this.setState({ sortColumn });
+  };
+
   render() {
-    const { selectedGenre, tasks, currentPage, pageSize } = this.state;
+    const { selectedGenre, tasks, sortColumn, currentPage, pageSize } =
+      this.state;
 
     const filtered =
       selectedGenre && selectedGenre._id
         ? getTasks().filter((t) => t.severity._id === selectedGenre._id)
         : getTasks();
 
-    const tasksPaginated = paginate(filtered, currentPage, pageSize);
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+    const tasksPaginated = paginate(sorted, currentPage, pageSize);
 
     return (
       <div className="row">
         <h1
           style={{ fontSize: 50, fontWeight: "bold" }}
-          className="text-success-emphasis"
+          className="text-primary-emphasis"
         >
           Task Manager
         </h1>
@@ -65,7 +73,12 @@ class Apps extends Component {
         </div>
         <div className="col">
           <p>Showing {filtered.length} Tasks in the database.</p>
-          <Task tasks={tasksPaginated} onClick={this.handleCompleted} />
+          <TaskTable
+            tasks={tasksPaginated}
+            sortColumn={sortColumn}
+            onComplete={this.handleCompleted}
+            onSort={this.handleSort}
+          />
           <Pagination
             itemCount={filtered.length}
             pageSize={pageSize}
