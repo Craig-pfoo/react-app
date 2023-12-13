@@ -57,12 +57,12 @@ class Tasks extends Component {
 
     return (
       <div className="row">
-        <h1
+        {/* <h1
           style={{ fontSize: 50, fontWeight: "bold" }}
           className="text-primary-emphasis"
         >
           Task Manager
-        </h1>
+        </h1> */}
         <div className="col-3 mt-1">
           <TaskGroup
             tasks={this.state.genres}

@@ -4,4 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Apps from "./App";
 
-ReactDOM.render(<Apps />, document.getElementById("root"));
+ReactDOM.render(
+  <BrowserRouter>
+    <Apps />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
