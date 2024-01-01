@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div classNameName="container-fluid">
+      <div className="container-fluid">
         <Link className="navbar-brand" to="/">
           TaskManager
         </Link>
