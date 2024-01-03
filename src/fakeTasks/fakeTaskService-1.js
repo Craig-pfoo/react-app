@@ -1,3 +1,5 @@
+import * as sevAPI from "./fakeGenreService";
+
 const tasks = [
   {
     _id: "618c3432eddf61c496096578",
@@ -55,11 +57,11 @@ export function saveTask(task) {
   taskInDb.title = task.title;
   taskInDb.task = task.task;
   taskInDb.category = task.category;
-  taskInDb.severity = task.severity;
+  taskInDb.severity = sevAPI.genres.find((g) => g._id === task.severity);
   taskInDb.completed = task.completed;
 
   if (!taskInDb._id) {
-    taskInDb._id = Date.now();
+    taskInDb._id = Date.now().toString();
     tasks.push(taskInDb);
   }
   console.log(taskInDb);

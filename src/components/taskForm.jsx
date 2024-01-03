@@ -40,6 +40,7 @@ class TaskForm extends Form {
     return {
       _id: task._id,
       title: task.title,
+      task: task.task,
       category: task.category,
       severity: task.severity._id,
     };
