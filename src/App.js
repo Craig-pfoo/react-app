@@ -7,6 +7,8 @@ import LoginScreen from "./components/loginScreen";
 import NavBar from "./components/navBar";
 import Dashboard from "./components/admin/dashboard";
 import AllTasks from "./components/admin/allTasks";
+import RegisterUser from "./components/registerUser";
+import TaskForm from "./components/taskForm";
 
 class Apps extends Component {
   render() {
@@ -15,9 +17,11 @@ class Apps extends Component {
         <NavBar />
         <main className="container">
           <Switch>
+            <Route path="/tasks/:id" component={TaskForm}></Route>
             <Route path="/tasks" component={Tasks}></Route>
             <Route path="/not-found" component={NotFound}></Route>
             <Route path="/loginScreen" component={LoginScreen}></Route>
+            <Route path="/registerUser" component={RegisterUser}></Route>
             <Route path="/admin/dashboard" component={Dashboard}></Route>
             <Route path="/admin/allTasks" component={AllTasks}></Route>
             <Route path="/admin/users" component={Users}></Route>

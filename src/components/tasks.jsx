@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import TaskTable from "./tasksTable";
 import Pagination from "./common/pagination";
 import TaskGroup from "./common/taskGroup";
@@ -65,6 +66,9 @@ class Tasks extends Component {
           />
         </div>
         <div className="col">
+          <Link to="/tasks/new" className="btn btn-primary mb-2">
+            New Task
+          </Link>
           <p>Showing {filtered.length} Tasks in the database.</p>
           <TaskTable
             tasks={tasksPaginated}

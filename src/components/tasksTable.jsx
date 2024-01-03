@@ -1,11 +1,16 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import TableHeader from "./common/tableHeader";
 import TaskCompleted from "./common/completedTask";
 import TableBody from "./common/tableBody";
 
 class TaskTable extends Component {
   columns = [
-    { path: "title", label: "Title" },
+    {
+      path: "title",
+      label: "Title",
+      content: (task) => <Link to={`/tasks/${task._id}`}>{task.title}</Link>,
+    },
     { path: "task", label: "Task" },
     { path: "category", label: "Category" },
     { path: "severity.name", label: "Severity" },

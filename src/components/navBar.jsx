@@ -40,6 +40,11 @@ const NavBar = () => {
                 Admin
               </NavLink>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/registerUser">
+                Register
+              </NavLink>
+            </li>
           </ul>
         </div>
       </div>
