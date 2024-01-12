@@ -1,27 +1,30 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import TaskTable from "./tasksTable";
 import Pagination from "./common/pagination";
 import TaskGroup from "./common/taskGroup";
 import PropTypes from "prop-types";
-import { getGenres } from "../fakeTasks/fakeGenreService";
+import { getSeverities } from "../services/severityService";
 import { paginate } from "../utils/paginate";
-import { getTasks } from "../fakeTasks/fakeTaskService-1";
+import { getTasks, deleteTask } from "../services/taskService";
 import _ from "lodash";
 
 class Tasks extends Component {
   state = {
     tasks: [],
-    genres: [],
+    severities: [],
     currentPage: 1,
     pageSize: 3,
     sortColumn: { path: "title", order: "asc" },
   };
 
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Severities" }, ...getGenres()];
+  async componentDidMount() {
+    const { data } = await getSeverities();
+    const severities = [{ _id: "", name: "All Severities" }, ...data];
 
-    this.setState({ tasks: getTasks(), genres });
+    const { data: tasks } = await getTasks();
+    this.setState({ tasks, severities });
   }
 
   handleCompleted = (task) => {
@@ -32,12 +35,27 @@ class Tasks extends Component {
     this.setState({ tasks });
   };
 
+  handleDelete = async (task) => {
+    const originalTasks = this.state.tasks;
+    const tasks = originalTasks.filter((t) => t._id !== task._id);
+    this.setState({ tasks });
+
+    try {
+      await deleteTask(task._id);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) console.log("x");
+      toast.error("This task has already been deleted.");
+
+      this.setState({ tasks: originalTasks });
+    }
+  };
+
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
-  handleGenreSelect = (genre) => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+  handleSeveritySelect = (severities) => {
+    this.setState({ selectedSeverity: severities, currentPage: 1 });
   };
 
   handleSort = (sortColumn) => {
@@ -45,12 +63,18 @@ class Tasks extends Component {
   };
 
   render() {
-    const { selectedGenre, sortColumn, currentPage, pageSize } = this.state;
+    const {
+      selectedSeverity,
+      sortColumn,
+      currentPage,
+      pageSize,
+      tasks: allTasks,
+    } = this.state;
 
     const filtered =
-      selectedGenre && selectedGenre._id
-        ? getTasks().filter((t) => t.severity._id === selectedGenre._id)
-        : getTasks();
+      selectedSeverity && selectedSeverity._id
+        ? allTasks.filter((t) => t.severity._id === selectedSeverity._id)
+        : allTasks;
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -60,9 +84,9 @@ class Tasks extends Component {
       <div className="row">
         <div className="col-3 mt-1">
           <TaskGroup
-            tasks={this.state.genres}
+            tasks={this.state.severities}
             selectedItem={this.state.selectedGenre}
-            onItemSelect={this.handleGenreSelect}
+            onItemSelect={this.handleSeveritySelect}
           />
         </div>
         <div className="col">
@@ -74,6 +98,7 @@ class Tasks extends Component {
             tasks={tasksPaginated}
             sortColumn={sortColumn}
             onComplete={this.handleCompleted}
+            onDelete={this.handleDelete}
             onSort={this.handleSort}
           />
           <Pagination

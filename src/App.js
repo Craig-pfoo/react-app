@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import Tasks from "./components/tasks";
 import Users from "./components/admin/users";
 import NotFound from "./components/notFound";
@@ -9,11 +10,13 @@ import Dashboard from "./components/admin/dashboard";
 import AllTasks from "./components/admin/allTasks";
 import RegisterUser from "./components/registerUser";
 import TaskForm from "./components/taskForm";
+import "react-toastify/dist/ReactToastify.css";
 
 class Apps extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer />
         <NavBar />
         <main className="container">
           <Switch>

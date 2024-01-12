@@ -25,6 +25,17 @@ class TaskTable extends Component {
         />
       ),
     },
+    {
+      key: "delete",
+      content: (task) => (
+        <button
+          onClick={() => this.props.onDelete(task)}
+          className="btn btn-danger btn-sm"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   render() {
