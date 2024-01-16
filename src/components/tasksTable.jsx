@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import TableHeader from "./common/tableHeader";
 import TaskCompleted from "./common/completedTask";
 import TableBody from "./common/tableBody";
+import auth from "../services/authService";
 
 class TaskTable extends Component {
   columns = [
@@ -25,18 +26,25 @@ class TaskTable extends Component {
         />
       ),
     },
-    {
-      key: "delete",
-      content: (task) => (
-        <button
-          onClick={() => this.props.onDelete(task)}
-          className="btn btn-danger btn-sm"
-        >
-          Delete
-        </button>
-      ),
-    },
   ];
+
+  deleteColumn = {
+    key: "delete",
+    content: (task) => (
+      <button
+        onClick={() => this.props.onDelete(task)}
+        className="btn btn-danger btn-sm"
+      >
+        Delete
+      </button>
+    ),
+  };
+
+  constructor() {
+    super();
+    const user = auth.getCurrentUser();
+    if (user && user.isAdmin) this.columns.push(this.deleteColumn);
+  }
 
   render() {
     const { tasks, onSort, sortColumn } = this.props;

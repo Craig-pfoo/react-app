@@ -70,6 +70,7 @@ class Tasks extends Component {
       pageSize,
       tasks: allTasks,
     } = this.state;
+    const { user } = this.props;
 
     const filtered =
       selectedSeverity && selectedSeverity._id
@@ -90,9 +91,11 @@ class Tasks extends Component {
           />
         </div>
         <div className="col">
-          <Link to="/tasks/new" className="btn btn-primary mb-2">
-            New Task
-          </Link>
+          {user && (
+            <Link to="/tasks/new" className="btn btn-primary mb-2">
+              New Task
+            </Link>
+          )}
           <p>Showing {filtered.length} Tasks in the database.</p>
           <TaskTable
             tasks={tasksPaginated}

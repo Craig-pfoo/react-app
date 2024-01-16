@@ -1,4 +1,3 @@
-import { func } from "joi";
 import http from "./httpServices";
 
 const apiEndpoint = "http://localhost:3001/api/tasks";
